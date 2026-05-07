@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canvas Liderança Multigeracional | Crescimentum</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent: #007BEA;
+  --accent-dark: #001B71;
+  --accent-light: #B3DFFF;
+  --text: #210000;
+  --text-light: #666;
+  --border: #e0e0e0;
+  --bg: #ffffff;
+  --bg-soft: #f4f8fe;
+  --radius: 12px;
+  --max-w: 720px;
+  --gen-boomer: #001B71;
+  --gen-x: #0052A3;
+  --gen-millennial: #007BEA;
+  --gen-z: #5CB8FF;
+}
+
+body {
+  font-family: 'Aptos', 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar-wrap {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 4px; background: var(--border); z-index: 100;
+  display: none;
+}
+.progress-bar-fill {
+  height: 100%; background: var(--accent);
+  transition: width 0.4s ease;
+}
+
+/* ── ETAPA INDICATOR ── */
+.etapa-indicator {
+  position: fixed; top: 4px; left: 0; right: 0;
+  display: none; justify-content: center;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  z-index: 99;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.etapa-pills {
+  display: flex; gap: 8px; align-items: center;
+}
+.etapa-pill {
+  font-family: 'Raleway', sans-serif;
+  font-size: 11px; font-weight: 700;
+  padding: 4px 12px; border-radius: 20px;
+  color: var(--text-light); background: var(--bg-soft);
+  letter-spacing: 0.3px;
+}
+.etapa-pill.active {
+  background: var(--accent); color: white;
+}
+.etapa-pill.done {
+  background: var(--accent-light); color: var(--accent-dark);
+}
+
+/* ── SCREENS ── */
+.screen {
+  display: none; width: 100%;
+  max-width: var(--max-w);
+  padding: 72px 24px 80px;
+  animation: fadeIn 0.35s ease;
+  flex-direction: column;
+}
+.screen.active { display: flex; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── TYPOGRAPHY ── */
+.page-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: clamp(22px, 5vw, 30px);
+  font-weight: 800; color: var(--accent);
+  margin-bottom: 8px; line-height: 1.2;
+}
+.page-subtitle {
+  font-size: clamp(14px, 2.5vw, 16px);
+  color: var(--text-light); margin-bottom: 28px;
+  line-height: 1.6;
+}
+.section-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: clamp(16px, 3vw, 20px);
+  font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}
+.section-desc {
+  font-size: 14px; color: var(--text-light);
+  margin-bottom: 24px; line-height: 1.6;
+}
+
+/* ── FORM ELEMENTS ── */
+.field-group {
+  margin-bottom: 20px;
+}
+.field-label {
+  font-family: 'Raleway', sans-serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--text); margin-bottom: 6px;
+  display: block; letter-spacing: 0.2px;
+}
+.field-label .optional {
+  font-weight: 400; color: var(--text-light);
+  font-size: 12px; margin-left: 4px;
+}
+.field-input, .field-select {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px; font-family: inherit;
+  font-size: 14px; color: var(--text);
+  background: var(--bg); outline: none;
+  transition: border-color 0.2s;
+}
+.field-input:focus, .field-select:focus {
+  border-color: var(--accent);
+}
+.field-textarea {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px; font-family: inherit;
+  font-size: 14px; color: var(--text);
+  background: var(--bg); outline: none;
+  transition: border-color 0.2s;
+  resize: vertical; min-height: 80px;
+  line-height: 1.6;
+}
+.field-textarea:focus { border-color: var(--accent); }
+
+.fields-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-bottom: 20px;
+}
+.fields-row-3 {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px; margin-bottom: 20px;
+}
+
+.question-block {
+  margin-bottom: 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--border);
+}
+.question-block:last-child { border-bottom: none; }
+.question-label {
+  font-family: 'Raleway', sans-serif;
+  font-size: clamp(14px, 2.5vw, 15px);
+  font-weight: 700; color: var(--text);
+  margin-bottom: 10px; line-height: 1.5;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none; border-top: 1px solid var(--border);
+  margin: 28px 0;
+}
+
+/* ── IDENTITY CARD ── */
+.identity-card {
+  background: var(--bg-soft);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px; margin-bottom: 28px;
+}
+.identity-card-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--accent); text-transform: uppercase;
+  letter-spacing: 0.8px; margin-bottom: 14px;
+}
+
+/* ── BUTTONS ── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent); color: #fff;
+  font-family: 'Raleway', sans-serif; font-weight: 700;
+  font-size: 15px; padding: 13px 28px;
+  border: none; border-radius: 8px;
+  cursor: pointer; transition: background 0.2s, transform 0.1s;
+}
+.btn-primary:hover { background: #0063c5; }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--bg-soft); color: var(--accent);
+  font-family: 'Raleway', sans-serif; font-weight: 700;
+  font-size: 14px; padding: 11px 22px;
+  border: 1.5px solid var(--accent); border-radius: 8px;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-secondary:hover { background: #ebf5ff; }
+
+.btn-back {
+  background: none; border: none;
+  color: var(--text-light); font-size: 14px;
+  cursor: pointer; display: inline-flex;
+  align-items: center; gap: 6px;
+  padding: 0; margin-bottom: 24px;
+  font-family: inherit; transition: color 0.2s;
+}
+.btn-back:hover { color: var(--text); }
+
+.btn-danger-sm {
+  background: none; border: none;
+  color: #cc3300; font-size: 12px;
+  cursor: pointer; font-family: inherit;
+  padding: 4px 8px; border-radius: 6px;
+  transition: background 0.2s;
+}
+.btn-danger-sm:hover { background: #fff0ed; }
+
+.nav-row {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-top: 32px; gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ── PERSON CARDS ── */
+.person-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+
+.person-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden; background: var(--bg);
+}
+.person-card-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px; cursor: pointer;
+  gap: 12px;
+}
+.person-card-header:hover { background: var(--bg-soft); }
+.person-card-info { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.person-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Raleway', sans-serif; font-weight: 800;
+  font-size: 14px; color: white; flex-shrink: 0;
+}
+.person-name-area { min-width: 0; }
+.person-name {
+  font-family: 'Raleway', sans-serif; font-weight: 700;
+  font-size: 15px; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.person-meta {
+  font-size: 12px; color: var(--text-light);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.gen-badge {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+  color: white; white-space: nowrap; flex-shrink: 0;
+}
+.person-card-body {
+  display: none; padding: 16px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.person-card-body.open { display: block; }
+.person-card-actions {
+  display: flex; gap: 8px; margin-top: 12px;
+}
+
+/* ── ADD PERSON FORM ── */
+.add-person-form {
+  display: none;
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 20px; margin-bottom: 20px;
+  background: #f7fbff;
+}
+.add-person-form.open { display: block; }
+.add-form-title {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700; font-size: 15px;
+  color: var(--accent); margin-bottom: 16px;
+}
+
+/* ── PIE CHART ── */
+.chart-section {
+  margin-top: 28px; padding: 20px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  display: none;
+}
+.chart-section.visible { display: block; }
+.chart-title {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700; font-size: 15px;
+  color: var(--text); margin-bottom: 16px;
+}
+.chart-layout {
+  display: flex; align-items: center;
+  gap: 24px; flex-wrap: wrap;
+}
+#pieCanvas {
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+.chart-legend { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 140px; }
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.legend-dot {
+  width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+}
+.legend-label { font-size: 13px; color: var(--text); }
+.legend-count { font-size: 12px; color: var(--text-light); margin-left: auto; }
+
+/* ── ETAPA 3: TABLE ── */
+.ref-table {
+  width: 100%; border-collapse: collapse;
+  margin-bottom: 28px; font-size: 14px;
+}
+.ref-table th {
+  background: var(--accent); color: white;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700; padding: 12px 14px;
+  text-align: left; font-size: 13px;
+}
+.ref-table th:first-child { border-radius: 10px 0 0 0; }
+.ref-table th:last-child { border-radius: 0 10px 0 0; }
+.ref-table td {
+  padding: 12px 14px; vertical-align: top;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.5;
+}
+.ref-table tr:last-child td { border-bottom: none; }
+.ref-table tr:nth-child(even) td { background: var(--bg-soft); }
+.ref-table td:first-child {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700; color: var(--text);
+  width: 26%;
+}
+.table-wrap {
+  overflow-x: auto; border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  margin-bottom: 32px;
+}
+
+/* ── DORES ACCORDION ── */
+.dores-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: clamp(16px, 3vw, 18px); font-weight: 700;
+  color: var(--text); margin-bottom: 6px;
+}
+.dores-desc {
+  font-size: 14px; color: var(--text-light);
+  margin-bottom: 16px; line-height: 1.6;
+}
+.dor-accordion { margin-bottom: 10px; }
+.dor-accordion-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px; cursor: pointer;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  transition: all 0.2s;
+}
+.dor-accordion-header:hover { background: var(--bg-soft); }
+.dor-accordion-header.open {
+  border-color: var(--accent);
+  background: #ebf5ff;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.dor-accordion-name {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700; font-size: 15px; color: var(--text);
+}
+.dor-accordion-chevron {
+  font-size: 18px; color: var(--text-light);
+  transition: transform 0.2s; line-height: 1;
+}
+.dor-accordion-header.open .dor-accordion-chevron { transform: rotate(180deg); }
+.dor-accordion-body {
+  display: none; padding: 16px 18px;
+  border: 1.5px solid var(--accent);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: #f7fbff;
+}
+.dor-accordion-body.open { display: block; }
+.dor-what {
+  font-size: 13.5px; color: var(--text-light);
+  margin-bottom: 14px; line-height: 1.6;
+  font-style: italic;
+}
+.dor-steps { display: flex; flex-direction: column; gap: 10px; }
+.dor-step {
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.step-num {
+  min-width: 24px; height: 24px; border-radius: 50%;
+  background: var(--accent); color: white;
+  font-family: 'Raleway', sans-serif; font-weight: 700;
+  font-size: 12px; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.step-text { font-size: 13.5px; line-height: 1.6; color: var(--text); }
+
+/* ── RESULT FOOTER ── */
+.result-footer {
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+/* ── COVER ── */
+.cover-img { width: 100%; height: auto; margin-bottom: 28px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 520px) {
+  .screen { padding: 72px 16px 80px; }
+  .fields-row, .fields-row-3 { grid-template-columns: 1fr; }
+  .chart-layout { flex-direction: column; align-items: flex-start; }
+  .nav-row { flex-direction: column-reverse; align-items: stretch; }
+  .nav-row .btn-primary { text-align: center; justify-content: center; }
+  .ref-table { font-size: 13px; }
+  .ref-table td, .ref-table th { padding: 10px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar-wrap" id="progressBar">
+  <div class="progress-bar-fill" id="progressFill"></div>
+</div>
+
+<div class="etapa-indicator" id="etapaIndicator">
+  <div class="etapa-pills">
+    <span class="etapa-pill" id="pill1">Etapa 1</span>
+    <span style="color:#ccc;font-size:12px;">›</span>
+    <span class="etapa-pill" id="pill2">Etapa 2</span>
+    <span style="color:#ccc;font-size:12px;">›</span>
+    <span class="etapa-pill" id="pill3">Etapa 3</span>
+  </div>
+</div>
+
+<!-- ══ CAPA ══ -->
+<div class="screen active" id="screen-cover">
+  <img src="https://i.imgur.com/XVfvmJy.png" alt="Crescimentum" style="height:24px;width:auto;max-width:120px;object-fit:contain;margin-bottom:44px;">
+  <h1 class="page-title">Canvas Liderança Multigeracional</h1>
+  <p class="page-subtitle">Uma ferramenta de reflexão para mapear sua autopercepção como liderança, conhecer melhor as pessoas da sua equipe e acessar referências práticas sobre liderança multigeracional.</p>
+
+  <div style="background:var(--bg-soft);border-radius:var(--radius);padding:20px;margin-bottom:28px;">
+    <p style="font-size:14px;line-height:1.7;color:var(--text);">
+      Este canvas tem <strong>3 etapas</strong>:<br><br>
+      <strong style="color:var(--accent)">Etapa 1</strong> — Autopercepção como liderança multigeracional<br>
+      <strong style="color:var(--accent)">Etapa 2</strong> — Retrato Geracional da Equipe<br>
+      <strong style="color:var(--accent)">Etapa 3</strong> — Painel de Referência e Planos de Ação
+    </p>
+  </div>
+
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:28px;line-height:1.6;">
+    Ao final, você poderá baixar o resultado completo em PDF!
+  </p>
+
+  <div>
+    <button class="btn-primary" onclick="goTo('screen-etapa1')">Começar →</button>
+  </div>
+</div>
+
+<!-- ══ ETAPA 1: AUTOPERCEPÇÃO ══ -->
+<div class="screen" id="screen-etapa1">
+  <button class="btn-back" onclick="goTo('screen-cover')">← Voltar</button>
+
+  <h1 class="page-title">Autopercepção</h1>
+  <p class="page-subtitle">Liderança Multigeracional — Esta etapa tem como objetivo te levar a se entender como geração e como liderança de outras gerações.</p>
+
+  <!-- Identidade -->
+  <div class="identity-card">
+    <div class="identity-card-title">Identificação</div>
+    <div class="fields-row-3">
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label">Nome</label>
+        <input class="field-input" id="e1-nome" type="text" placeholder="Seu nome">
+      </div>
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label">Área</label>
+        <input class="field-input" id="e1-area" type="text" placeholder="Sua área">
+      </div>
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label">Cargo</label>
+        <input class="field-input" id="e1-cargo" type="text" placeholder="Seu cargo">
+      </div>
+    </div>
+  </div>
+
+  <!-- Perguntas -->
+  <div class="question-block">
+    <div class="question-label">De qual geração você faz parte? Como isso moldou seu jeito de liderar?</div>
+    <textarea class="field-textarea" id="e1-q1" placeholder="Escreva sua reflexão aqui..."></textarea>
+  </div>
+  <div class="question-block">
+    <div class="question-label">Quais valores dessa geração você carrega conscientemente na liderança, e quais carrega sem perceber?</div>
+    <textarea class="field-textarea" id="e1-q2" placeholder="Escreva sua reflexão aqui..."></textarea>
+  </div>
+  <div class="question-block">
+    <div class="question-label">Com qual geração da sua equipe você tem mais facilidade de se conectar? E mais dificuldade?</div>
+    <textarea class="field-textarea" id="e1-q3" placeholder="Escreva sua reflexão aqui..."></textarea>
+  </div>
+  <div class="question-block">
+    <div class="question-label">Já interpretou um comportamento de alguém como "falta de comprometimento" que, na verdade, pode ser uma diferença geracional?</div>
+    <textarea class="field-textarea" id="e1-q4" placeholder="Escreva sua reflexão aqui..."></textarea>
+  </div>
+  <div class="question-block">
+    <div class="question-label">Você já usou expressões como "na minha época era diferente" ou "essa geração não quer nada"? O que isso revela?</div>
+    <textarea class="field-textarea" id="e1-q5" placeholder="Escreva sua reflexão aqui..."></textarea>
+  </div>
+  <div class="question-block">
+    <div class="question-label">Você tende a dar mais credibilidade a quem tem mais tempo de casa, independentemente da qualidade da ideia?</div>
+    <textarea class="field-textarea" id="e1-q6" placeholder="Escreva sua reflexão aqui..."></textarea>
+  </div>
+  <div class="question-block">
+    <div class="question-label">Você consegue nomear o que motiva cada geração presente na sua equipe hoje?</div>
+    <textarea class="field-textarea" id="e1-q7" placeholder="Escreva sua reflexão aqui..."></textarea>
+  </div>
+  <div class="question-block">
+    <div class="question-label">Você adapta sua liderança conforme a geração, ou aplica o mesmo estilo para todas as pessoas?</div>
+    <textarea class="field-textarea" id="e1-q8" placeholder="Escreva sua reflexão aqui..."></textarea>
+  </div>
+
+  <div class="nav-row" style="justify-content:flex-end;">
+    <button class="btn-primary" onclick="goTo('screen-etapa2')">Etapa 2 →</button>
+  </div>
+</div>
+
+<!-- ══ ETAPA 2: RETRATO GERACIONAL ══ -->
+<div class="screen" id="screen-etapa2">
+  <button class="btn-back" onclick="goTo('screen-etapa1')">← Voltar</button>
+
+  <h1 class="page-title">Retrato Geracional da Equipe</h1>
+  <p class="page-subtitle">Adicione as pessoas da sua equipe e responda as perguntas sobre cada uma. O gráfico da composição geracional se atualiza automaticamente.</p>
+
+  <!-- Lista de pessoas -->
+  <div class="person-list" id="personList"></div>
+
+  <!-- Formulário de adição -->
+  <div class="add-person-form" id="addPersonForm">
+    <div class="add-form-title" id="addFormTitle">Nova pessoa</div>
+
+    <div class="fields-row">
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label">Nome</label>
+        <input class="field-input" id="pf-nome" type="text" placeholder="Nome completo">
+      </div>
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label">Cargo</label>
+        <input class="field-input" id="pf-cargo" type="text" placeholder="Cargo atual">
+      </div>
+    </div>
+    <div class="fields-row">
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label">Idade <span class="optional">(opcional)</span></label>
+        <input class="field-input" id="pf-idade" type="number" placeholder="Ex: 32" min="16" max="80">
+      </div>
+      <div class="field-group" style="margin-bottom:0">
+        <label class="field-label">Geração</label>
+        <select class="field-select" id="pf-geracao">
+          <option value="">Selecione...</option>
+          <option value="Baby Boomer">Baby Boomer (1946–1964)</option>
+          <option value="Geração X">Geração X (1965–1980)</option>
+          <option value="Millennial">Millennial (1981–1996)</option>
+          <option value="Geração Z">Geração Z (1997–2012)</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="divider" style="margin:16px 0">
+
+    <div class="question-block">
+      <div class="question-label">O que você sabe sobre os valores e motivações típicos dessa geração?</div>
+      <textarea class="field-textarea" id="pf-q1" placeholder="Escreva aqui..."></textarea>
+    </div>
+    <div class="question-block">
+      <div class="question-label">Quais comportamentos, atitudes ou valores dessa pessoa você reconhece como característicos da geração dela?</div>
+      <textarea class="field-textarea" id="pf-q2" placeholder="Escreva aqui..."></textarea>
+    </div>
+    <div class="question-block">
+      <div class="question-label">Como isso aparece no dia a dia do trabalho?</div>
+      <textarea class="field-textarea" id="pf-q3" placeholder="Escreva aqui..."></textarea>
+    </div>
+    <div class="question-block">
+      <div class="question-label">O que nessa pessoa surpreende ou contradiz o que seria esperado para a geração dela?</div>
+      <textarea class="field-textarea" id="pf-q4" placeholder="Escreva aqui..."></textarea>
+    </div>
+    <div class="question-block">
+      <div class="question-label">Existe algum traço que você associaria mais a outra geração? Qual?</div>
+      <textarea class="field-textarea" id="pf-q5" placeholder="Escreva aqui..."></textarea>
+    </div>
+    <div class="question-block">
+      <div class="question-label">Como você costuma se comunicar com ela? Esse estilo foi escolhido conscientemente ou é o mesmo que usa com todas as pessoas?</div>
+      <textarea class="field-textarea" id="pf-q6" placeholder="Escreva aqui..."></textarea>
+    </div>
+    <div class="question-block">
+      <div class="question-label">O que a motiva, e você realmente usa isso na prática?</div>
+      <textarea class="field-textarea" id="pf-q7" placeholder="Escreva aqui..."></textarea>
+    </div>
+    <div class="question-block">
+      <div class="question-label">Existe alguma tensão ou ruído frequente com essa pessoa? O quanto disso pode ter raiz geracional?</div>
+      <textarea class="field-textarea" id="pf-q8" placeholder="Escreva aqui..."></textarea>
+    </div>
+    <div class="question-block" style="border-bottom:none;padding-bottom:0">
+      <div class="question-label">O que você ainda não conhece bem sobre essa pessoa que seria importante descobrir?</div>
+      <textarea class="field-textarea" id="pf-q9" placeholder="Escreva aqui..."></textarea>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+      <button class="btn-primary" id="btnSavePerson" onclick="savePerson()">Salvar pessoa</button>
+      <button class="btn-secondary" onclick="cancelAddPerson()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Botão adicionar -->
+  <button class="btn-secondary" id="btnAddPerson" onclick="openAddForm()" style="margin-bottom:20px;">
+    + Adicionar pessoa
+  </button>
+
+  <!-- Gráfico de pizza -->
+  <div class="chart-section" id="chartSection">
+    <div class="chart-title">Composição geracional da equipe</div>
+    <div class="chart-layout">
+      <canvas id="pieCanvas" width="140" height="140"></canvas>
+      <div class="chart-legend" id="chartLegend"></div>
+    </div>
+  </div>
+
+  <div class="nav-row" style="justify-content:flex-end;">
+    <button class="btn-primary" onclick="goTo('screen-etapa3')">Etapa 3 →</button>
+  </div>
+</div>
+
+<!-- ══ ETAPA 3: PAINEL DE REFERÊNCIA ══ -->
+<div class="screen" id="screen-etapa3">
+  <button class="btn-back" onclick="goTo('screen-etapa2')">← Voltar</button>
+
+  <h1 class="page-title">Painel de Referência</h1>
+  <p class="page-subtitle">Consulte a tabela comparativa entre gerações e acesse os planos de ação para cada dor organizacional.</p>
+
+  <!-- Tabela -->
+  <div class="section-title">Comparativo Geracional</div>
+  <p class="section-desc">Referência para adaptar sua liderança conforme as características de cada grupo geracional.</p>
+
+  <div class="table-wrap">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Dimensão</th>
+          <th>Baby Boomers e Gen X</th>
+          <th>Millennials e Gen Z</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>O que valoriza</td>
+          <td>Estabilidade, reconhecimento por experiência, resultado concreto</td>
+          <td>Propósito, autonomia, crescimento, pertencimento</td>
+        </tr>
+        <tr>
+          <td>Comunicação preferida</td>
+          <td>Direta, objetiva, com base em dados e histórico</td>
+          <td>Frequente, com contexto, aberta ao diálogo e feedback</td>
+        </tr>
+        <tr>
+          <td>Como dar feedback</td>
+          <td>Formal, baseado em entregas e performance histórica</td>
+          <td>Contínuo, específico, com escuta ativa e caminhos claros</td>
+        </tr>
+        <tr>
+          <td>Como delegar</td>
+          <td>Com clareza de resultado esperado e autonomia de método</td>
+          <td>Com clareza de propósito, contexto e espaço para co-criação</td>
+        </tr>
+        <tr>
+          <td>Como engajar</td>
+          <td>Reconhecimento do legado e do papel de referência no time</td>
+          <td>Visibilidade, impacto percebido e desenvolvimento real</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Dores -->
+  <div class="dores-title">Planos de Ação por Dor Organizacional</div>
+  <p class="dores-desc">Clique em cada dor para ver as ações práticas para trabalhar com sua equipe.</p>
+
+  <div id="doresContainer"></div>
+
+  <div class="result-footer">
+    <button class="btn-primary" id="btnDownloadPDF" onclick="generatePDF()" style="justify-content:center;">
+      Baixar Canvas em PDF
+    </button>
+    <button style="background:none;border:1.5px solid var(--border);color:var(--text-light);font-family:'Raleway',sans-serif;font-size:14px;font-weight:600;padding:10px 22px;border-radius:8px;cursor:pointer;transition:all 0.2s;" onclick="goTo('screen-cover')">
+      ↺ Recomeçar
+    </button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  DADOS
+// ══════════════════════════════════════════
+const GEN_COLORS = {
+  'Baby Boomer': '#77AD18',
+  'Geração X':   '#E6233A',
+  'Millennial':  '#FF5527',
+  'Geração Z':   '#009EAA'
+};
+
+const DORES = [
+  {
+    nome: 'Gestão sem repertório geracional',
+    oque: 'A liderança não conhece as características, motivações e expectativas de cada geração presente na equipe.',
+    passos: [
+      'Mapeie sua equipe geracionalmente: identifique quais gerações compõem seu time (Baby Boomers, X, Millennials, Z) e quantas pessoas representam cada uma.',
+      'Estude os contextos formadores de cada geração: dedique 30 minutos por semana para ler ou assistir conteúdos sobre o que moldou os valores de cada grupo.',
+      'Faça conversas individuais com intenção: reserve 1:1s para perguntar sobre expectativas de carreira, estilo de trabalho preferido e o que mais motiva cada pessoa.',
+      'Construa um "mapa de preferências": documente o que aprendeu e use para personalizar comunicação, feedbacks e desafios.',
+      'Revise o mapa a cada 6 meses: pessoas mudam, contextos mudam. Mantenha o repertório atualizado.'
+    ]
+  },
+  {
+    nome: 'Ruídos entre gerações e níveis',
+    oque: 'Conflitos de comunicação e expectativas entre gerações diferentes, agravados por diferenças hierárquicas.',
+    passos: [
+      'Nomeie o ruído sem julgamento: quando identificar um conflito geracional, traga o tema à tona de forma neutra. "Percebo que temos formas diferentes de encarar isso. Vamos entender cada perspectiva?"',
+      'Crie acordos de comunicação na equipe: conduza uma reunião para estabelecer combinados sobre canais, tempo de resposta e tom esperado nas trocas do time.',
+      'Traduza intenções, não apenas palavras: ao mediar conflitos, ajude cada parte a entender a intenção por trás do comportamento do outro.',
+      'Implemente rodas de conversa intergeracionais: promova encontros mensais informais onde gerações diferentes compartilham perspectivas sobre um tema do trabalho.',
+      'Monitore o clima: use pulsos rápidos (1 pergunta semanal) para perceber se os ruídos estão aumentando ou diminuindo.'
+    ]
+  },
+  {
+    nome: 'Resultado versus humanização',
+    oque: 'Tensão entre a pressão por entregas e a necessidade de cuidar das pessoas, especialmente sentida por gerações mais jovens.',
+    passos: [
+      'Redefina produtividade com sua equipe: discuta coletivamente o que significa entregar bem e trabalhar de forma sustentável.',
+      'Separe urgência de importância: revise prioridades semanalmente e questione publicamente quando algo "urgente" não é realmente importante.',
+      'Demonstre cuidado com atos concretos: verifique carga de trabalho antes de delegar, reconheça esforço além do resultado e pergunte genuinamente como as pessoas estão.',
+      'Crie espaço para falar sobre limites e sobrecarga: normalize que a equipe possa sinalizar quando está no limite, sem medo de julgamento.',
+      'Acompanhe resultado e bem-estar: inclua uma métrica de saúde do time (ex: NPS interno, nível de energia percebido) nas suas conversas de acompanhamento.'
+    ]
+  },
+  {
+    nome: 'Engajamento em diferentes fases',
+    oque: 'O que engaja uma pessoa em início de carreira é diferente do que engaja alguém com 20 anos de empresa, e a liderança precisa saber navegar isso.',
+    passos: [
+      'Identifique a fase de cada pessoa: vá além da geração. Entenda onde cada um está na carreira (exploração, consolidação, legado) e o que busca nesse momento.',
+      'Personalize desafios e reconhecimentos: ofereça projetos e visibilidade para quem quer crescer; autonomia e propósito para quem já se consolidou.',
+      'Conecte o trabalho ao "para quê" individual: em conversas 1:1, pergunte como o trabalho atual se conecta com os objetivos pessoais de cada pessoa.',
+      'Varie os formatos de reconhecimento: algumas pessoas valorizam feedback público, outras preferem uma conversa particular. Pergunte qual forma é mais significativa.',
+      'Revise o engajamento a cada trimestre: o que engajava há 6 meses pode não engajar mais. Mantenha o diagnóstico vivo.'
+    ]
+  },
+  {
+    nome: 'Conhecimento que não se transfere',
+    oque: 'O conhecimento fica concentrado em pessoas mais experientes e não flui para o restante da equipe, gerando risco de perda e desconexão entre gerações.',
+    passos: [
+      'Mapeie onde está o conhecimento crítico: identifique quais saberes essenciais dependem de uma ou duas pessoas na equipe.',
+      'Crie duplas intergeracionais: conecte profissionais experientes com pessoas mais jovens em projetos reais, com troca intencional de perspectivas.',
+      'Institua rituais de compartilhamento: reserve 15 minutos em reuniões de equipe para alguém compartilhar algo que aprendeu (qualquer pessoa, qualquer geração).',
+      'Documente antes de perder: estruture entrevistas de conhecimento com profissionais mais experientes antes de promoções, aposentadorias ou saídas.',
+      'Valorize o que cada geração ensina: deixe claro que a transferência é de mão dupla. Pessoas jovens trazem fluência digital e novas perspectivas; as mais experientes trazem contexto e julgamento.'
+    ]
+  }
+];
+
+// ══════════════════════════════════════════
+//  ESTADO
+// ══════════════════════════════════════════
+let pessoas = [];
+let editingIndex = -1;
+
+// ══════════════════════════════════════════
+//  NAVEGAÇÃO
+// ══════════════════════════════════════════
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  window.scrollTo(0, 0);
+  updateProgress(screenId);
+}
+
+function updateProgress(screenId) {
+  const bar = document.getElementById('progressBar');
+  const fill = document.getElementById('progressFill');
+  const indicator = document.getElementById('etapaIndicator');
+  const pills = ['pill1','pill2','pill3'];
+  const etapaMap = { 'screen-etapa1': 0, 'screen-etapa2': 1, 'screen-etapa3': 2 };
+
+  if (screenId === 'screen-cover') {
+    bar.style.display = 'none';
+    indicator.style.display = 'none';
+    return;
+  }
+
+  bar.style.display = 'block';
+  indicator.style.display = 'flex';
+
+  const idx = etapaMap[screenId] ?? 0;
+  const pct = ((idx + 1) / 3) * 100;
+  fill.style.width = pct + '%';
+
+  pills.forEach((p, i) => {
+    const el = document.getElementById(p);
+    el.className = 'etapa-pill';
+    if (i < idx) el.classList.add('done');
+    else if (i === idx) el.classList.add('active');
+  });
+}
+
+// ══════════════════════════════════════════
+//  ETAPA 2: PESSOAS
+// ══════════════════════════════════════════
+function openAddForm(index = -1) {
+  editingIndex = index;
+  const form = document.getElementById('addPersonForm');
+  const title = document.getElementById('addFormTitle');
+  const btn = document.getElementById('btnSavePerson');
+
+  if (index >= 0) {
+    const p = pessoas[index];
+    document.getElementById('pf-nome').value = p.nome;
+    document.getElementById('pf-cargo').value = p.cargo;
+    document.getElementById('pf-idade').value = p.idade;
+    document.getElementById('pf-geracao').value = p.geracao;
+    ['q1','q2','q3','q4','q5','q6','q7','q8','q9'].forEach((q,i) => {
+      document.getElementById('pf-' + q).value = p.respostas[i] || '';
+    });
+    title.textContent = 'Editar: ' + p.nome;
+    btn.textContent = 'Salvar alterações';
+  } else {
+    ['nome','cargo','idade','pf-geracao'].forEach(id => {
+      const el = document.getElementById(id === 'pf-geracao' ? id : 'pf-' + id);
+      if (el) el.value = '';
+    });
+    document.getElementById('pf-nome').value = '';
+    document.getElementById('pf-cargo').value = '';
+    document.getElementById('pf-idade').value = '';
+    document.getElementById('pf-geracao').value = '';
+    ['q1','q2','q3','q4','q5','q6','q7','q8','q9'].forEach(q => {
+      document.getElementById('pf-' + q).value = '';
+    });
+    title.textContent = 'Nova pessoa';
+    btn.textContent = 'Salvar pessoa';
+  }
+
+  form.classList.add('open');
+  document.getElementById('btnAddPerson').style.display = 'none';
+  form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function cancelAddPerson() {
+  document.getElementById('addPersonForm').classList.remove('open');
+  document.getElementById('btnAddPerson').style.display = '';
+  editingIndex = -1;
+}
+
+function savePerson() {
+  const nome = document.getElementById('pf-nome').value.trim();
+  const cargo = document.getElementById('pf-cargo').value.trim();
+  const idade = document.getElementById('pf-idade').value.trim();
+  const geracao = document.getElementById('pf-geracao').value;
+
+  if (!nome) { alert('Por favor, informe o nome da pessoa.'); return; }
+  if (!geracao) { alert('Por favor, selecione a geração.'); return; }
+
+  const respostas = ['q1','q2','q3','q4','q5','q6','q7','q8','q9'].map(q =>
+    document.getElementById('pf-' + q).value.trim()
+  );
+
+  const pessoa = { nome, cargo, idade, geracao, respostas };
+
+  if (editingIndex >= 0) {
+    pessoas[editingIndex] = pessoa;
+  } else {
+    pessoas.push(pessoa);
+  }
+
+  cancelAddPerson();
+  renderPersonList();
+  updateChart();
+  saveAll();
+}
+
+function deletePerson(index) {
+  if (!confirm('Remover ' + pessoas[index].nome + '?')) return;
+  pessoas.splice(index, 1);
+  renderPersonList();
+  updateChart();
+  saveAll();
+}
+
+function renderPersonList() {
+  const list = document.getElementById('personList');
+  list.innerHTML = '';
+
+  pessoas.forEach((p, i) => {
+    const color = GEN_COLORS[p.geracao] || '#007BEA';
+    const initials = p.nome.split(' ').slice(0,2).map(n => n[0]).join('').toUpperCase();
+
+    const card = document.createElement('div');
+    card.className = 'person-card';
+    card.innerHTML = `
+      <div class="person-card-header" onclick="togglePersonCard(${i})">
+        <div class="person-card-info">
+          <div class="person-avatar" style="background:${color}">${initials}</div>
+          <div class="person-name-area">
+            <div class="person-name">${p.nome}</div>
+            <div class="person-meta">${[p.cargo, p.idade ? p.idade + ' anos' : ''].filter(Boolean).join(' · ')}</div>
+          </div>
+        </div>
+        <span class="gen-badge" style="background:${color}">${p.geracao}</span>
+        <span style="color:var(--text-light);font-size:18px;margin-left:4px;">›</span>
+      </div>
+      <div class="person-card-body" id="pcb-${i}">
+        ${buildPersonAnswers(p)}
+        <div class="person-card-actions">
+          <button class="btn-secondary" onclick="openAddForm(${i})" style="font-size:13px;padding:8px 16px;">Editar</button>
+          <button class="btn-danger-sm" onclick="deletePerson(${i})">Remover</button>
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function buildPersonAnswers(p) {
+  const labels = [
+    'Valores e motivações da geração',
+    'Comportamentos característicos',
+    'Como aparece no dia a dia',
+    'O que surpreende ou contradiz',
+    'Traço de outra geração',
+    'Forma de comunicação',
+    'O que a motiva na prática',
+    'Tensões ou ruídos frequentes',
+    'O que ainda não conhece bem'
+  ];
+  return labels.map((l, i) => p.respostas[i] ? `
+    <div style="margin-bottom:10px;">
+      <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:3px;">${l}</div>
+      <div style="font-size:13.5px;line-height:1.6;color:var(--text);">${p.respostas[i]}</div>
+    </div>` : ''
+  ).join('');
+}
+
+function togglePersonCard(i) {
+  const body = document.getElementById('pcb-' + i);
+  body.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════
+//  GRÁFICO DE PIZZA
+// ══════════════════════════════════════════
+function updateChart() {
+  const section = document.getElementById('chartSection');
+  if (pessoas.length === 0) { section.classList.remove('visible'); return; }
+  section.classList.add('visible');
+
+  const counts = {};
+  pessoas.forEach(p => { counts[p.geracao] = (counts[p.geracao] || 0) + 1; });
+
+  drawPie(counts);
+  drawLegend(counts);
+}
+
+function drawPie(counts) {
+  const canvas = document.getElementById('pieCanvas');
+  const ctx = canvas.getContext('2d');
+  const total = Object.values(counts).reduce((a,b) => a+b, 0);
+  const cx = 70, cy = 70, r = 62;
+  let startAngle = -Math.PI / 2;
+
+  ctx.clearRect(0, 0, 140, 140);
+
+  Object.entries(counts).forEach(([gen, count]) => {
+    const slice = (count / total) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, startAngle, startAngle + slice);
+    ctx.closePath();
+    ctx.fillStyle = GEN_COLORS[gen] || '#007BEA';
+    ctx.fill();
+    startAngle += slice;
+  });
+
+  // Círculo central
+  ctx.beginPath();
+  ctx.arc(cx, cy, 30, 0, Math.PI * 2);
+  ctx.fillStyle = '#fff';
+  ctx.fill();
+
+  // Número total
+  ctx.fillStyle = '#210000';
+  ctx.font = 'bold 18px Raleway, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(total, cx, cy - 4);
+  ctx.font = '10px Aptos, sans-serif';
+  ctx.fillStyle = '#999';
+  ctx.fillText('pessoas', cx, cy + 10);
+}
+
+function drawLegend(counts) {
+  const total = Object.values(counts).reduce((a,b) => a+b, 0);
+  const legend = document.getElementById('chartLegend');
+  legend.innerHTML = Object.entries(counts).map(([gen, count]) => `
+    <div class="legend-item">
+      <div class="legend-dot" style="background:${GEN_COLORS[gen] || '#007BEA'}"></div>
+      <span class="legend-label">${gen}</span>
+      <span class="legend-count">${count} (${Math.round(count/total*100)}%)</span>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════
+//  ETAPA 3: DORES ACCORDION
+// ══════════════════════════════════════════
+function renderDores() {
+  const container = document.getElementById('doresContainer');
+  container.innerHTML = DORES.map((dor, i) => `
+    <div class="dor-accordion">
+      <div class="dor-accordion-header" id="dh-${i}" onclick="toggleDor(${i})">
+        <span class="dor-accordion-name">${dor.nome}</span>
+        <span class="dor-accordion-chevron">⌄</span>
+      </div>
+      <div class="dor-accordion-body" id="db-${i}">
+        <div class="dor-what">${dor.oque}</div>
+        <div class="dor-steps">
+          ${dor.passos.map((p, j) => `
+            <div class="dor-step">
+              <div class="step-num">${j+1}</div>
+              <div class="step-text">${p}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleDor(i) {
+  const header = document.getElementById('dh-' + i);
+  const body = document.getElementById('db-' + i);
+  header.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════
+//  PDF
+// ══════════════════════════════════════════
+function generatePDF() {
+  const btn = document.getElementById('btnDownloadPDF');
+  btn.textContent = '⏳ Gerando PDF...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const W = 210, margin = 18, cW = W - margin * 2;
+      let y = 0;
+
+      function header(title, subtitle) {
+        doc.setFillColor(0, 123, 234);
+        doc.rect(0, 0, W, 34, 'F');
+        doc.setTextColor(255,255,255);
+        doc.setFont('helvetica','bold'); doc.setFontSize(16);
+        doc.text(title, margin, 14);
+        doc.setFont('helvetica','normal'); doc.setFontSize(9);
+        doc.text(subtitle, margin, 23);
+        const data = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+        doc.text(data, W - margin, 23, {align:'right'});
+        y = 44;
+      }
+
+      function checkPage(needed = 20) {
+        if (y + needed > 275) { doc.addPage(); y = 20; }
+      }
+
+      function sectionTitle(t) {
+        checkPage(14);
+        doc.setFillColor(235,245,255);
+        doc.rect(margin, y, cW, 9, 'F');
+        doc.setFont('helvetica','bold'); doc.setFontSize(11);
+        doc.setTextColor(0,123,234);
+        doc.text(t, margin + 3, y + 6.5);
+        y += 13;
+      }
+
+      function fieldBlock(label, value) {
+        if (!value) return;
+        const lines = doc.splitTextToSize(value, cW - 4);
+        const h = lines.length * 4.8 + 10;
+        checkPage(h);
+        doc.setFont('helvetica','bold'); doc.setFontSize(9);
+        doc.setTextColor(0,123,234);
+        doc.text(label, margin, y);
+        y += 5;
+        doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
+        doc.setTextColor(33,0,0);
+        doc.text(lines, margin + 2, y);
+        y += lines.length * 4.8 + 5;
+      }
+
+      function footer() {
+        const pages = doc.internal.getNumberOfPages();
+        for (let p = 1; p <= pages; p++) {
+          doc.setPage(p);
+          doc.setFontSize(8); doc.setTextColor(180,180,180);
+          doc.text('Crescimentum | crescimentum.com.br', margin, 290);
+          doc.text(`${p} / ${pages}`, W - margin, 290, {align:'right'});
+        }
+      }
+
+      // ── ETAPA 1 ──
+      header('Canvas Liderança Multigeracional', 'Crescimentum | Resultado Individual');
+
+      sectionTitle('ETAPA 1: AUTOPERCEPÇÃO');
+      const nome = document.getElementById('e1-nome').value;
+      const area = document.getElementById('e1-area').value;
+      const cargo = document.getElementById('e1-cargo').value;
+      if (nome || area || cargo) {
+        doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
+        doc.setTextColor(100,100,100);
+        doc.text([nome, area, cargo].filter(Boolean).join(' · '), margin, y); y += 8;
+      }
+
+      const e1labels = [
+        'De qual geração você faz parte? Como isso moldou seu jeito de liderar?',
+        'Quais valores dessa geração você carrega conscientemente, e quais carrega sem perceber?',
+        'Com qual geração você tem mais facilidade? E mais dificuldade?',
+        'Já interpretou "falta de comprometimento" como diferença geracional?',
+        'Você já usou "na minha época era diferente"? O que isso revela?',
+        'Você tende a dar mais credibilidade a quem tem mais tempo de casa?',
+        'Você consegue nomear o que motiva cada geração da sua equipe?',
+        'Você adapta sua liderança conforme a geração?'
+      ];
+      e1labels.forEach((l, i) => {
+        fieldBlock(l, document.getElementById(`e1-q${i+1}`).value);
+      });
+
+      // ── ETAPA 2 ──
+      if (pessoas.length > 0) {
+        doc.addPage(); y = 20;
+        sectionTitle('ETAPA 2: RETRATO GERACIONAL DA EQUIPE');
+
+        const pLabels = [
+          'Valores e motivações da geração',
+          'Comportamentos característicos',
+          'Como aparece no dia a dia',
+          'O que surpreende ou contradiz',
+          'Traço de outra geração',
+          'Forma de comunicação',
+          'O que a motiva na prática',
+          'Tensões ou ruídos frequentes',
+          'O que ainda não conhece bem'
+        ];
+
+        pessoas.forEach((p, pi) => {
+          checkPage(20);
+          const color = GEN_COLORS[p.geracao] || '#007BEA';
+          const rgb = hexToRgb(color);
+          doc.setFillColor(rgb.r, rgb.g, rgb.b);
+          doc.rect(margin, y, cW, 10, 'F');
+          doc.setFont('helvetica','bold'); doc.setFontSize(11);
+          doc.setTextColor(255,255,255);
+          doc.text(`${p.nome}  ·  ${p.cargo}${p.idade ? '  ·  ' + p.idade + ' anos' : ''}`, margin + 3, y + 7);
+          doc.setFontSize(9);
+          doc.text(p.geracao, W - margin - 3, y + 7, {align:'right'});
+          y += 14;
+
+          pLabels.forEach((l, li) => {
+            fieldBlock(l, p.respostas[li]);
+          });
+          y += 4;
+        });
+
+        // Composição da equipe
+        checkPage(30);
+        sectionTitle('Composição Geracional');
+        const counts = {};
+        pessoas.forEach(p => { counts[p.geracao] = (counts[p.geracao] || 0) + 1; });
+        const total = pessoas.length;
+        Object.entries(counts).forEach(([gen, count]) => {
+          checkPage(10);
+          const rgb = hexToRgb(GEN_COLORS[gen] || '#007BEA');
+          const pct = Math.round(count/total*100);
+          const bW = cW - 60;
+          doc.setFillColor(230,230,230);
+          doc.roundedRect(margin, y, bW, 6, 2, 2, 'F');
+          doc.setFillColor(rgb.r, rgb.g, rgb.b);
+          doc.roundedRect(margin, y, bW * (pct/100), 6, 2, 2, 'F');
+          doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(33,0,0);
+          doc.text(gen, margin + bW + 4, y + 5);
+          doc.setFont('helvetica','normal'); doc.setTextColor(100,100,100);
+          doc.text(`${count} (${pct}%)`, W - margin, y + 5, {align:'right'});
+          y += 10;
+        });
+      }
+
+      footer();
+      doc.save('Canvas Liderança Multigeracional - Resultado.pdf');
+
+    } catch(e) {
+      console.error(e);
+      alert('Não foi possível gerar o PDF. Tente novamente.');
+    } finally {
+      btn.textContent = 'Baixar Canvas em PDF';
+      btn.disabled = false;
+    }
+  }, 100);
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return {r,g,b};
+}
+
+// ══════════════════════════════════════════
+//  AUTOSAVE — localStorage
+// ══════════════════════════════════════════
+const SAVE_KEY = 'canvas_multigeracional_v1';
+
+function saveAll() {
+  const data = {
+    e1: {
+      nome:  document.getElementById('e1-nome').value,
+      area:  document.getElementById('e1-area').value,
+      cargo: document.getElementById('e1-cargo').value,
+      respostas: [1,2,3,4,5,6,7,8].map(i => document.getElementById('e1-q'+i).value)
+    },
+    pessoas
+  };
+  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+}
+
+function loadAll() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+
+    if (data.e1) {
+      document.getElementById('e1-nome').value  = data.e1.nome  || '';
+      document.getElementById('e1-area').value  = data.e1.area  || '';
+      document.getElementById('e1-cargo').value = data.e1.cargo || '';
+      (data.e1.respostas || []).forEach((v, i) => {
+        const el = document.getElementById('e1-q' + (i+1));
+        if (el) el.value = v || '';
+      });
+    }
+
+    if (data.pessoas && data.pessoas.length > 0) {
+      pessoas = data.pessoas;
+      renderPersonList();
+      updateChart();
+    }
+  } catch(e) {
+    console.warn('Erro ao carregar dados salvos:', e);
+  }
+}
+
+function clearSave() {
+  if (!confirm('Isso vai apagar todos os dados preenchidos. Tem certeza?')) return;
+  localStorage.removeItem(SAVE_KEY);
+  location.reload();
+}
+
+// Salva automaticamente em qualquer input/textarea/select da página
+document.addEventListener('input', saveAll);
+document.addEventListener('change', saveAll);
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+renderDores();
+loadAll();
+</script>
+</body>
+</html>
