@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Canvas Liderança Multigeracional | Crescimentum</title>
+<title>Matriz Multigeracional | Crescimentum</title>
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
@@ -333,7 +333,7 @@ body {
 /* ── ETAPA 3: TABLE ── */
 .ref-table {
   width: 100%; border-collapse: collapse;
-  margin-bottom: 28px; font-size: 14px;
+  margin-bottom: 0; font-size: 14px;
 }
 .ref-table th {
   background: var(--accent); color: white;
@@ -348,7 +348,6 @@ body {
   border-bottom: 1px solid var(--border);
   line-height: 1.5;
 }
-.ref-table tr:last-child td { border-bottom: none; }
 .ref-table tr:nth-child(even) td { background: var(--bg-soft); }
 .ref-table td:first-child {
   font-family: 'Raleway', sans-serif;
@@ -463,12 +462,12 @@ body {
 <!-- ══ CAPA ══ -->
 <div class="screen active" id="screen-cover">
   <img src="https://i.imgur.com/XVfvmJy.png" alt="Crescimentum" style="height:24px;width:auto;max-width:120px;object-fit:contain;margin-bottom:44px;">
-  <h1 class="page-title">Canvas Liderança Multigeracional</h1>
+  <h1 class="page-title">Matriz Multigeracional</h1>
   <p class="page-subtitle">Uma ferramenta de reflexão para mapear sua autopercepção como liderança, conhecer melhor as pessoas da sua equipe e acessar referências práticas sobre liderança multigeracional.</p>
 
   <div style="background:var(--bg-soft);border-radius:var(--radius);padding:20px;margin-bottom:28px;">
     <p style="font-size:14px;line-height:1.7;color:var(--text);">
-      Este canvas tem <strong>3 etapas</strong>:<br><br>
+      Esta matriz tem <strong>3 etapas</strong>:<br><br>
       <strong style="color:var(--accent)">Etapa 1</strong> — Autopercepção como liderança multigeracional<br>
       <strong style="color:var(--accent)">Etapa 2</strong> — Retrato Geracional da Equipe<br>
       <strong style="color:var(--accent)">Etapa 3</strong> — Painel de Referência e Planos de Ação
@@ -486,8 +485,6 @@ body {
 
 <!-- ══ ETAPA 1: AUTOPERCEPÇÃO ══ -->
 <div class="screen" id="screen-etapa1">
-  <button class="btn-back" onclick="goTo('screen-cover')">← Voltar</button>
-
   <h1 class="page-title">Autopercepção</h1>
   <p class="page-subtitle">Liderança Multigeracional — Esta etapa tem como objetivo te levar a se entender como geração e como liderança de outras gerações.</p>
 
@@ -544,20 +541,46 @@ body {
     <textarea class="field-textarea" id="e1-q8" placeholder="Escreva sua reflexão aqui..."></textarea>
   </div>
 
-  <div class="nav-row" style="justify-content:flex-end;">
+  <div class="nav-row" style="justify-content:space-between;">
+    <button class="btn-secondary" onclick="goTo('screen-cover')">← Voltar</button>
     <button class="btn-primary" onclick="goTo('screen-etapa2')">Etapa 2 →</button>
   </div>
 </div>
 
 <!-- ══ ETAPA 2: RETRATO GERACIONAL ══ -->
 <div class="screen" id="screen-etapa2">
-  <button class="btn-back" onclick="goTo('screen-etapa1')">← Voltar</button>
-
   <h1 class="page-title">Retrato Geracional da Equipe</h1>
   <p class="page-subtitle">Adicione as pessoas da sua equipe e responda as perguntas sobre cada uma. O gráfico da composição geracional se atualiza automaticamente.</p>
 
+  <!-- Tabela de referência -->
+  <div class="section-title" style="margin-bottom:6px;">Comparativo Geracional</div>
+  <p class="section-desc">Referência para adaptar sua liderança conforme as características de cada grupo geracional.</p>
+  <div class="table-wrap" style="margin-bottom:28px;">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Dimensão</th>
+          <th>Baby Boomers e Gen X</th>
+          <th>Millennials e Gen Z</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>O que valoriza</td><td>Estabilidade, reconhecimento por experiência, resultado concreto</td><td>Propósito, autonomia, crescimento, pertencimento</td></tr>
+        <tr><td>Comunicação preferida</td><td>Direta, objetiva, com base em dados e histórico</td><td>Frequente, com contexto, aberta ao diálogo e feedback</td></tr>
+        <tr><td>Como dar feedback</td><td>Formal, baseado em entregas e performance histórica</td><td>Contínuo, específico, com escuta ativa e caminhos claros</td></tr>
+        <tr><td>Como delegar</td><td>Com clareza de resultado esperado e autonomia de método</td><td>Com clareza de propósito, contexto e espaço para co-criação</td></tr>
+        <tr><td>Como engajar</td><td>Reconhecimento do legado e do papel de referência no time</td><td>Visibilidade, impacto percebido e desenvolvimento real</td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <!-- Lista de pessoas -->
   <div class="person-list" id="personList"></div>
+
+  <!-- Botão adicionar -->
+  <button class="btn-secondary" id="btnAddPerson" onclick="openAddForm()" style="margin-bottom:20px;">
+    + Adicionar pessoa
+  </button>
 
   <!-- Formulário de adição -->
   <div class="add-person-form" id="addPersonForm">
@@ -635,11 +658,6 @@ body {
     </div>
   </div>
 
-  <!-- Botão adicionar -->
-  <button class="btn-secondary" id="btnAddPerson" onclick="openAddForm()" style="margin-bottom:20px;">
-    + Adicionar pessoa
-  </button>
-
   <!-- Gráfico de pizza -->
   <div class="chart-section" id="chartSection">
     <div class="chart-title">Composição geracional da equipe</div>
@@ -649,62 +667,16 @@ body {
     </div>
   </div>
 
-  <div class="nav-row" style="justify-content:flex-end;">
+  <div class="nav-row" style="justify-content:space-between;">
+    <button class="btn-secondary" onclick="goTo('screen-etapa1')">← Voltar</button>
     <button class="btn-primary" onclick="goTo('screen-etapa3')">Etapa 3 →</button>
   </div>
 </div>
 
 <!-- ══ ETAPA 3: PAINEL DE REFERÊNCIA ══ -->
 <div class="screen" id="screen-etapa3">
-  <button class="btn-back" onclick="goTo('screen-etapa2')">← Voltar</button>
-
   <h1 class="page-title">Painel de Referência</h1>
-  <p class="page-subtitle">Consulte a tabela comparativa entre gerações e acesse os planos de ação para cada dor organizacional.</p>
-
-  <!-- Tabela -->
-  <div class="section-title">Comparativo Geracional</div>
-  <p class="section-desc">Referência para adaptar sua liderança conforme as características de cada grupo geracional.</p>
-
-  <div class="table-wrap">
-    <table class="ref-table">
-      <thead>
-        <tr>
-          <th>Dimensão</th>
-          <th>Baby Boomers e Gen X</th>
-          <th>Millennials e Gen Z</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>O que valoriza</td>
-          <td>Estabilidade, reconhecimento por experiência, resultado concreto</td>
-          <td>Propósito, autonomia, crescimento, pertencimento</td>
-        </tr>
-        <tr>
-          <td>Comunicação preferida</td>
-          <td>Direta, objetiva, com base em dados e histórico</td>
-          <td>Frequente, com contexto, aberta ao diálogo e feedback</td>
-        </tr>
-        <tr>
-          <td>Como dar feedback</td>
-          <td>Formal, baseado em entregas e performance histórica</td>
-          <td>Contínuo, específico, com escuta ativa e caminhos claros</td>
-        </tr>
-        <tr>
-          <td>Como delegar</td>
-          <td>Com clareza de resultado esperado e autonomia de método</td>
-          <td>Com clareza de propósito, contexto e espaço para co-criação</td>
-        </tr>
-        <tr>
-          <td>Como engajar</td>
-          <td>Reconhecimento do legado e do papel de referência no time</td>
-          <td>Visibilidade, impacto percebido e desenvolvimento real</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <hr class="divider">
+  <p class="page-subtitle">Acesse os planos de ação para cada dor organizacional identificada.</p>
 
   <!-- Dores -->
   <div class="dores-title">Planos de Ação por Dor Organizacional</div>
@@ -712,13 +684,12 @@ body {
 
   <div id="doresContainer"></div>
 
-  <div class="result-footer">
-    <button class="btn-primary" id="btnDownloadPDF" onclick="generatePDF()" style="justify-content:center;">
-      Baixar Canvas em PDF
+  <div class="result-footer" style="flex-direction:row;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;">
+    <button class="btn-secondary" onclick="goTo('screen-etapa2')">← Voltar</button>
+    <button class="btn-primary" id="btnDownloadPDF" onclick="generatePDF()">
+      Baixar Matriz em PDF
     </button>
-    <button style="background:none;border:1.5px solid var(--border);color:var(--text-light);font-family:'Raleway',sans-serif;font-size:14px;font-weight:600;padding:10px 22px;border-radius:8px;cursor:pointer;transition:all 0.2s;" onclick="goTo('screen-cover')">
-      ↺ Recomeçar
-    </button>
+    <button class="btn-secondary" onclick="goTo('screen-cover')">↺ Recomeçar</button>
   </div>
 </div>
 
@@ -942,8 +913,8 @@ function renderPersonList() {
       <div class="person-card-body" id="pcb-${i}">
         ${buildPersonAnswers(p)}
         <div class="person-card-actions">
-          <button class="btn-secondary" onclick="openAddForm(${i})" style="font-size:13px;padding:8px 16px;">Editar</button>
-          <button class="btn-danger-sm" onclick="deletePerson(${i})">Remover</button>
+          <button class="btn-secondary" onclick="deletePerson(${i})" style="font-size:13px;padding:8px 16px;">Remover</button>
+          <button class="btn-primary" onclick="openAddForm(${i})" style="font-size:13px;padding:8px 16px;">Editar</button>
         </div>
       </div>
     `;
@@ -965,7 +936,7 @@ function buildPersonAnswers(p) {
   ];
   return labels.map((l, i) => p.respostas[i] ? `
     <div style="margin-bottom:10px;">
-      <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:3px;">${l}</div>
+      <div style="font-size:12px;font-weight:700;color:#210000;margin-bottom:3px;">${l}</div>
       <div style="font-size:13.5px;line-height:1.6;color:var(--text);">${p.respostas[i]}</div>
     </div>` : ''
   ).join('');
@@ -1121,7 +1092,7 @@ function generatePDF() {
         const h = lines.length * 4.8 + 10;
         checkPage(h);
         doc.setFont('helvetica','bold'); doc.setFontSize(9);
-        doc.setTextColor(0,123,234);
+        doc.setTextColor(33,0,0);
         doc.text(label, margin, y);
         y += 5;
         doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
@@ -1141,7 +1112,7 @@ function generatePDF() {
       }
 
       // ── ETAPA 1 ──
-      header('Canvas Liderança Multigeracional', 'Crescimentum | Resultado Individual');
+      header('Matriz Multigeracional', 'Crescimentum | Resultado Individual');
 
       sectionTitle('ETAPA 1: AUTOPERCEPÇÃO');
       const nome = document.getElementById('e1-nome').value;
@@ -1226,14 +1197,62 @@ function generatePDF() {
         });
       }
 
+      // ── ETAPA 3: PLANOS DE AÇÃO ──
+      doc.addPage(); y = 20;
+      sectionTitle('ETAPA 3: PLANOS DE AÇÃO POR DOR ORGANIZACIONAL');
+
+      DORES.forEach((dor, di) => {
+        // Estimar altura
+        const oqueLines = doc.splitTextToSize(dor.oque, cW - 6);
+        let estH = 12 + oqueLines.length * 4.5 + 6;
+        const passosLines = dor.passos.map(p => doc.splitTextToSize(p, cW - 14));
+        passosLines.forEach(pl => { estH += pl.length * 4.5 + 4; });
+        estH += 6;
+
+        checkPage(estH);
+
+        // Header da dor
+        doc.setFillColor(0, 123, 234);
+        doc.rect(margin, y, cW, 9, 'F');
+        doc.setFont('helvetica','bold'); doc.setFontSize(11);
+        doc.setTextColor(255,255,255);
+        doc.text(`Dor ${di + 1}: ${dor.nome}`, margin + 3, y + 6.5);
+        y += 13;
+
+        // O que é
+        doc.setFont('helvetica','italic'); doc.setFontSize(9);
+        doc.setTextColor(100,100,100);
+        doc.text(oqueLines, margin + 2, y);
+        y += oqueLines.length * 4.5 + 4;
+
+        // Passos
+        passosLines.forEach((lines, pi) => {
+          checkPage(lines.length * 4.5 + 4);
+          // Bolinha do número
+          doc.setFillColor(0, 123, 234);
+          doc.circle(margin + 3.5, y + 1.5, 2.5, 'F');
+          doc.setFont('helvetica','bold'); doc.setFontSize(7.5);
+          doc.setTextColor(255,255,255);
+          doc.text(String(pi + 1), margin + 3.5, y + 2.5, {align:'center'});
+
+          // Texto do passo
+          doc.setFont('helvetica','normal'); doc.setFontSize(9);
+          doc.setTextColor(33,0,0);
+          doc.text(lines, margin + 9, y + 2);
+          y += lines.length * 4.5 + 4;
+        });
+
+        y += 6;
+      });
+
       footer();
-      doc.save('Canvas Liderança Multigeracional - Resultado.pdf');
+      doc.save('Matriz Multigeracional - Resultado.pdf');
 
     } catch(e) {
       console.error(e);
       alert('Não foi possível gerar o PDF. Tente novamente.');
     } finally {
-      btn.textContent = 'Baixar Canvas em PDF';
+      btn.textContent = 'Baixar Matriz em PDF';
       btn.disabled = false;
     }
   }, 100);
