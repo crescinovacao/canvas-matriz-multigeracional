@@ -454,8 +454,6 @@ body {
     <span class="etapa-pill" id="pill1">Etapa 1</span>
     <span style="color:#ccc;font-size:12px;">›</span>
     <span class="etapa-pill" id="pill2">Etapa 2</span>
-    <span style="color:#ccc;font-size:12px;">›</span>
-    <span class="etapa-pill" id="pill3">Etapa 3</span>
   </div>
 </div>
 
@@ -463,14 +461,13 @@ body {
 <div class="screen active" id="screen-cover">
   <img src="https://i.imgur.com/XVfvmJy.png" alt="Crescimentum" style="height:24px;width:auto;max-width:120px;object-fit:contain;margin-bottom:44px;">
   <h1 class="page-title">Matriz Multigeracional</h1>
-  <p class="page-subtitle">Uma ferramenta de reflexão para mapear sua autopercepção como liderança, conhecer melhor as pessoas da sua equipe e acessar referências práticas sobre liderança multigeracional.</p>
+  <p class="page-subtitle">Uma ferramenta de reflexão para mapear e conhecer melhor as pessoas da sua equipe e acessar referências práticas sobre liderança multigeracional.</p>
 
   <div style="background:var(--bg-soft);border-radius:var(--radius);padding:20px;margin-bottom:28px;">
     <p style="font-size:14px;line-height:1.7;color:var(--text);">
-      Esta matriz tem <strong>3 etapas</strong>:<br><br>
-      <strong style="color:var(--accent)">Etapa 1</strong> — Autopercepção como liderança multigeracional<br>
-      <strong style="color:var(--accent)">Etapa 2</strong> — Retrato Geracional da Equipe<br>
-      <strong style="color:var(--accent)">Etapa 3</strong> — Painel de Referência e Planos de Ação
+      Esta matriz tem <strong>2 etapas</strong>:<br><br>
+      <strong style="color:var(--accent)">Etapa 1</strong> — Retrato Geracional da Equipe<br>
+      <strong style="color:var(--accent)">Etapa 2</strong> — Painel de Referência e Planos de Ação
     </p>
   </div>
 
@@ -479,75 +476,11 @@ body {
   </p>
 
   <div>
-    <button class="btn-primary" onclick="goTo('screen-etapa1')">Começar →</button>
+    <button class="btn-primary" onclick="goTo('screen-etapa2')">Começar →</button>
   </div>
 </div>
 
-<!-- ══ ETAPA 1: AUTOPERCEPÇÃO ══ -->
-<div class="screen" id="screen-etapa1">
-  <h1 class="page-title">Autopercepção</h1>
-  <p class="page-subtitle">Liderança Multigeracional — Esta etapa tem como objetivo te levar a se entender como geração e como liderança de outras gerações.</p>
-
-  <!-- Identidade -->
-  <div class="identity-card">
-    <div class="identity-card-title">Identificação</div>
-    <div class="fields-row-3">
-      <div class="field-group" style="margin-bottom:0">
-        <label class="field-label">Nome</label>
-        <input class="field-input" id="e1-nome" type="text" placeholder="Seu nome">
-      </div>
-      <div class="field-group" style="margin-bottom:0">
-        <label class="field-label">Área</label>
-        <input class="field-input" id="e1-area" type="text" placeholder="Sua área">
-      </div>
-      <div class="field-group" style="margin-bottom:0">
-        <label class="field-label">Cargo</label>
-        <input class="field-input" id="e1-cargo" type="text" placeholder="Seu cargo">
-      </div>
-    </div>
-  </div>
-
-  <!-- Perguntas -->
-  <div class="question-block">
-    <div class="question-label">De qual geração você faz parte? Como isso moldou seu jeito de liderar?</div>
-    <textarea class="field-textarea" id="e1-q1" placeholder="Escreva sua reflexão aqui..."></textarea>
-  </div>
-  <div class="question-block">
-    <div class="question-label">Quais valores dessa geração você carrega conscientemente na liderança, e quais carrega sem perceber?</div>
-    <textarea class="field-textarea" id="e1-q2" placeholder="Escreva sua reflexão aqui..."></textarea>
-  </div>
-  <div class="question-block">
-    <div class="question-label">Com qual geração da sua equipe você tem mais facilidade de se conectar? E mais dificuldade?</div>
-    <textarea class="field-textarea" id="e1-q3" placeholder="Escreva sua reflexão aqui..."></textarea>
-  </div>
-  <div class="question-block">
-    <div class="question-label">Já interpretou um comportamento de alguém como "falta de comprometimento" que, na verdade, pode ser uma diferença geracional?</div>
-    <textarea class="field-textarea" id="e1-q4" placeholder="Escreva sua reflexão aqui..."></textarea>
-  </div>
-  <div class="question-block">
-    <div class="question-label">Você já usou expressões como "na minha época era diferente" ou "essa geração não quer nada"? O que isso revela?</div>
-    <textarea class="field-textarea" id="e1-q5" placeholder="Escreva sua reflexão aqui..."></textarea>
-  </div>
-  <div class="question-block">
-    <div class="question-label">Você tende a dar mais credibilidade a quem tem mais tempo de casa, independentemente da qualidade da ideia?</div>
-    <textarea class="field-textarea" id="e1-q6" placeholder="Escreva sua reflexão aqui..."></textarea>
-  </div>
-  <div class="question-block">
-    <div class="question-label">Você consegue nomear o que motiva cada geração presente na sua equipe hoje?</div>
-    <textarea class="field-textarea" id="e1-q7" placeholder="Escreva sua reflexão aqui..."></textarea>
-  </div>
-  <div class="question-block">
-    <div class="question-label">Você adapta sua liderança conforme a geração, ou aplica o mesmo estilo para todas as pessoas?</div>
-    <textarea class="field-textarea" id="e1-q8" placeholder="Escreva sua reflexão aqui..."></textarea>
-  </div>
-
-  <div class="nav-row" style="justify-content:space-between;">
-    <button class="btn-secondary" onclick="goTo('screen-cover')">← Voltar</button>
-    <button class="btn-primary" onclick="goTo('screen-etapa2')">Etapa 2 →</button>
-  </div>
-</div>
-
-<!-- ══ ETAPA 2: RETRATO GERACIONAL ══ -->
+<!-- ══ ETAPA 1 (antiga Etapa 2): RETRATO GERACIONAL ══ -->
 <div class="screen" id="screen-etapa2">
   <h1 class="page-title">Retrato Geracional da Equipe</h1>
   <p class="page-subtitle">Adicione as pessoas da sua equipe e responda as perguntas sobre cada uma. O gráfico da composição geracional se atualiza automaticamente.</p>
@@ -616,10 +549,6 @@ body {
     <hr class="divider" style="margin:16px 0">
 
     <div class="question-block">
-      <div class="question-label">O que você sabe sobre os valores e motivações típicos dessa geração?</div>
-      <textarea class="field-textarea" id="pf-q1" placeholder="Escreva aqui..."></textarea>
-    </div>
-    <div class="question-block">
       <div class="question-label">Quais comportamentos, atitudes ou valores dessa pessoa você reconhece como característicos da geração dela?</div>
       <textarea class="field-textarea" id="pf-q2" placeholder="Escreva aqui..."></textarea>
     </div>
@@ -632,24 +561,8 @@ body {
       <textarea class="field-textarea" id="pf-q4" placeholder="Escreva aqui..."></textarea>
     </div>
     <div class="question-block">
-      <div class="question-label">Existe algum traço que você associaria mais a outra geração? Qual?</div>
+      <div class="question-label">Existe alguma tensão ou ruído frequente com essa pessoa?</div>
       <textarea class="field-textarea" id="pf-q5" placeholder="Escreva aqui..."></textarea>
-    </div>
-    <div class="question-block">
-      <div class="question-label">Como você costuma se comunicar com ela? Esse estilo foi escolhido conscientemente ou é o mesmo que usa com todas as pessoas?</div>
-      <textarea class="field-textarea" id="pf-q6" placeholder="Escreva aqui..."></textarea>
-    </div>
-    <div class="question-block">
-      <div class="question-label">O que a motiva, e você realmente usa isso na prática?</div>
-      <textarea class="field-textarea" id="pf-q7" placeholder="Escreva aqui..."></textarea>
-    </div>
-    <div class="question-block">
-      <div class="question-label">Existe alguma tensão ou ruído frequente com essa pessoa? O quanto disso pode ter raiz geracional?</div>
-      <textarea class="field-textarea" id="pf-q8" placeholder="Escreva aqui..."></textarea>
-    </div>
-    <div class="question-block" style="border-bottom:none;padding-bottom:0">
-      <div class="question-label">O que você ainda não conhece bem sobre essa pessoa que seria importante descobrir?</div>
-      <textarea class="field-textarea" id="pf-q9" placeholder="Escreva aqui..."></textarea>
     </div>
 
     <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
@@ -668,15 +581,15 @@ body {
   </div>
 
   <div class="nav-row" style="justify-content:space-between;">
-    <button class="btn-secondary" onclick="goTo('screen-etapa1')">← Voltar</button>
-    <button class="btn-primary" onclick="goTo('screen-etapa3')">Etapa 3 →</button>
+    <button class="btn-secondary" onclick="goTo('screen-cover')">← Voltar</button>
+    <button class="btn-primary" onclick="goTo('screen-etapa3')">Etapa 2 →</button>
   </div>
 </div>
 
-<!-- ══ ETAPA 3: PAINEL DE REFERÊNCIA ══ -->
+<!-- ══ ETAPA 2: PAINEL DE REFERÊNCIA ══ -->
 <div class="screen" id="screen-etapa3">
   <h1 class="page-title">Painel de Referência</h1>
-  <p class="page-subtitle">Acesse os planos de ação para cada dor organizacional identificada.</p>
+  <p class="page-subtitle">Volte para o resultado do seu pré-work: Diagnóstico Multigeracional para ver quais forem as dores mais relevantes na sua equipe.</p>
 
   <!-- Dores -->
   <div class="dores-title">Planos de Ação por Dor Organizacional</div>
@@ -782,8 +695,8 @@ function updateProgress(screenId) {
   const bar = document.getElementById('progressBar');
   const fill = document.getElementById('progressFill');
   const indicator = document.getElementById('etapaIndicator');
-  const pills = ['pill1','pill2','pill3'];
-  const etapaMap = { 'screen-etapa1': 0, 'screen-etapa2': 1, 'screen-etapa3': 2 };
+  const pills = ['pill1','pill2'];
+  const etapaMap = { 'screen-etapa2': 0, 'screen-etapa3': 1 };
 
   if (screenId === 'screen-cover') {
     bar.style.display = 'none';
@@ -795,7 +708,7 @@ function updateProgress(screenId) {
   indicator.style.display = 'flex';
 
   const idx = etapaMap[screenId] ?? 0;
-  const pct = ((idx + 1) / 3) * 100;
+  const pct = ((idx + 1) / 2) * 100;
   fill.style.width = pct + '%';
 
   pills.forEach((p, i) => {
@@ -821,7 +734,7 @@ function openAddForm(index = -1) {
     document.getElementById('pf-cargo').value = p.cargo;
     document.getElementById('pf-idade').value = p.idade;
     document.getElementById('pf-geracao').value = p.geracao;
-    ['q1','q2','q3','q4','q5','q6','q7','q8','q9'].forEach((q,i) => {
+    ['q2','q3','q4','q5'].forEach((q,i) => {
       document.getElementById('pf-' + q).value = p.respostas[i] || '';
     });
     title.textContent = 'Editar: ' + p.nome;
@@ -835,7 +748,7 @@ function openAddForm(index = -1) {
     document.getElementById('pf-cargo').value = '';
     document.getElementById('pf-idade').value = '';
     document.getElementById('pf-geracao').value = '';
-    ['q1','q2','q3','q4','q5','q6','q7','q8','q9'].forEach(q => {
+    ['q2','q3','q4','q5'].forEach(q => {
       document.getElementById('pf-' + q).value = '';
     });
     title.textContent = 'Nova pessoa';
@@ -862,7 +775,7 @@ function savePerson() {
   if (!nome) { alert('Por favor, informe o nome da pessoa.'); return; }
   if (!geracao) { alert('Por favor, selecione a geração.'); return; }
 
-  const respostas = ['q1','q2','q3','q4','q5','q6','q7','q8','q9'].map(q =>
+  const respostas = ['q2','q3','q4','q5'].map(q =>
     document.getElementById('pf-' + q).value.trim()
   );
 
@@ -924,15 +837,10 @@ function renderPersonList() {
 
 function buildPersonAnswers(p) {
   const labels = [
-    'Valores e motivações da geração',
     'Comportamentos característicos',
     'Como aparece no dia a dia',
     'O que surpreende ou contradiz',
-    'Traço de outra geração',
-    'Forma de comunicação',
-    'O que a motiva na prática',
-    'Tensões ou ruídos frequentes',
-    'O que ainda não conhece bem'
+    'Tensões ou ruídos frequentes'
   ];
   return labels.map((l, i) => p.respostas[i] ? `
     <div style="margin-bottom:10px;">
@@ -1045,12 +953,39 @@ function toggleDor(i) {
 }
 
 // ══════════════════════════════════════════
-//  PDF
+//  PDF - Com logo do imgur
 // ══════════════════════════════════════════
-function generatePDF() {
+async function getBase64FromUrl(url) {
+  const res = await fetch(url);
+  const blob = await res.blob();
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function generatePDF() {
   const btn = document.getElementById('btnDownloadPDF');
   btn.textContent = '⏳ Gerando PDF...';
   btn.disabled = true;
+
+  // Buscar logo do imgur e calcular proporção
+  let logoBase64 = null;
+  let logoRatio = 0.28; // fallback (altura/largura aproximada do logo)
+  try {
+    logoBase64 = await getBase64FromUrl('https://i.imgur.com/fUPVKmL.png');
+    // Calcular proporção real da imagem
+    const logoImg = await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = logoBase64;
+    });
+    logoRatio = logoImg.naturalHeight / logoImg.naturalWidth;
+  } catch(e) {
+    console.warn('Não foi possível carregar logo:', e);
+  }
 
   setTimeout(() => {
     try {
@@ -1059,17 +994,32 @@ function generatePDF() {
       const W = 210, margin = 18, cW = W - margin * 2;
       let y = 0;
 
-      function header(title, subtitle) {
-        doc.setFillColor(0, 123, 234);
-        doc.rect(0, 0, W, 34, 'F');
+      function header(title, subtitle, logoBase64) {
+        // Fundo navy #001B71
+        doc.setFillColor(0, 27, 113);
+        doc.rect(0, 0, W, 50, 'F');
+        
+        // Adicionar logo no topo - largura fixa, altura proporcional
+        if (logoBase64) {
+          try {
+            const logoW = 32;
+            const logoH = logoW * logoRatio;
+            doc.addImage(logoBase64, 'PNG', margin, 8, logoW, logoH);
+          } catch(e) {
+            // Se falhar, continua sem a imagem
+          }
+        }
+        
+        // Título principal - embaixo do logo
         doc.setTextColor(255,255,255);
-        doc.setFont('helvetica','bold'); doc.setFontSize(16);
-        doc.text(title, margin, 14);
+        doc.setFont('helvetica','bold'); doc.setFontSize(24);
+        doc.text(title, margin, 33);
+        
+        // Subtítulo
         doc.setFont('helvetica','normal'); doc.setFontSize(9);
-        doc.text(subtitle, margin, 23);
-        const data = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
-        doc.text(data, W - margin, 23, {align:'right'});
-        y = 44;
+        doc.text(subtitle, margin, 42);
+        
+        y = 55;
       }
 
       function checkPage(needed = 20) {
@@ -1111,48 +1061,18 @@ function generatePDF() {
         }
       }
 
-      // ── ETAPA 1 ──
-      header('Matriz Multigeracional', 'Crescimentum | Resultado Individual');
+      // ── INICIA COM HEADER ──
+      header('Matriz Multigeracional', 'Resultado Individual', logoBase64);
 
-      sectionTitle('ETAPA 1: AUTOPERCEPÇÃO');
-      const nome = document.getElementById('e1-nome').value;
-      const area = document.getElementById('e1-area').value;
-      const cargo = document.getElementById('e1-cargo').value;
-      if (nome || area || cargo) {
-        doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
-        doc.setTextColor(100,100,100);
-        doc.text([nome, area, cargo].filter(Boolean).join(' · '), margin, y); y += 8;
-      }
-
-      const e1labels = [
-        'De qual geração você faz parte? Como isso moldou seu jeito de liderar?',
-        'Quais valores dessa geração você carrega conscientemente, e quais carrega sem perceber?',
-        'Com qual geração você tem mais facilidade? E mais dificuldade?',
-        'Já interpretou "falta de comprometimento" como diferença geracional?',
-        'Você já usou "na minha época era diferente"? O que isso revela?',
-        'Você tende a dar mais credibilidade a quem tem mais tempo de casa?',
-        'Você consegue nomear o que motiva cada geração da sua equipe?',
-        'Você adapta sua liderança conforme a geração?'
-      ];
-      e1labels.forEach((l, i) => {
-        fieldBlock(l, document.getElementById(`e1-q${i+1}`).value);
-      });
-
-      // ── ETAPA 2 ──
+      // ── ETAPA 1: RETRATO GERACIONAL ──
       if (pessoas.length > 0) {
-        doc.addPage(); y = 20;
-        sectionTitle('ETAPA 2: RETRATO GERACIONAL DA EQUIPE');
+        sectionTitle('ETAPA 1: RETRATO GERACIONAL DA EQUIPE');
 
         const pLabels = [
-          'Valores e motivações da geração',
           'Comportamentos característicos',
           'Como aparece no dia a dia',
           'O que surpreende ou contradiz',
-          'Traço de outra geração',
-          'Forma de comunicação',
-          'O que a motiva na prática',
-          'Tensões ou ruídos frequentes',
-          'O que ainda não conhece bem'
+          'Tensões ou ruídos frequentes'
         ];
 
         pessoas.forEach((p, pi) => {
@@ -1197,9 +1117,9 @@ function generatePDF() {
         });
       }
 
-      // ── ETAPA 3: PLANOS DE AÇÃO ──
+      // ── ETAPA 2: PLANOS DE AÇÃO ──
       doc.addPage(); y = 20;
-      sectionTitle('ETAPA 3: PLANOS DE AÇÃO POR DOR ORGANIZACIONAL');
+      sectionTitle('ETAPA 2: PLANOS DE AÇÃO POR DOR ORGANIZACIONAL');
 
       DORES.forEach((dor, di) => {
         // Estimar altura
@@ -1212,7 +1132,7 @@ function generatePDF() {
         checkPage(estH);
 
         // Header da dor
-        doc.setFillColor(0, 123, 234);
+        doc.setFillColor(0, 27, 113);
         doc.rect(margin, y, cW, 9, 'F');
         doc.setFont('helvetica','bold'); doc.setFontSize(11);
         doc.setTextColor(255,255,255);
@@ -1229,7 +1149,7 @@ function generatePDF() {
         passosLines.forEach((lines, pi) => {
           checkPage(lines.length * 4.5 + 4);
           // Bolinha do número
-          doc.setFillColor(0, 123, 234);
+          doc.setFillColor(0, 27, 113);
           doc.circle(margin + 3.5, y + 1.5, 2.5, 'F');
           doc.setFont('helvetica','bold'); doc.setFontSize(7.5);
           doc.setTextColor(255,255,255);
@@ -1245,7 +1165,6 @@ function generatePDF() {
         y += 6;
       });
 
-      footer();
       doc.save('Matriz Multigeracional - Resultado.pdf');
 
     } catch(e) {
@@ -1272,12 +1191,6 @@ const SAVE_KEY = 'canvas_multigeracional_v1';
 
 function saveAll() {
   const data = {
-    e1: {
-      nome:  document.getElementById('e1-nome').value,
-      area:  document.getElementById('e1-area').value,
-      cargo: document.getElementById('e1-cargo').value,
-      respostas: [1,2,3,4,5,6,7,8].map(i => document.getElementById('e1-q'+i).value)
-    },
     pessoas
   };
   localStorage.setItem(SAVE_KEY, JSON.stringify(data));
@@ -1288,16 +1201,6 @@ function loadAll() {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return;
     const data = JSON.parse(raw);
-
-    if (data.e1) {
-      document.getElementById('e1-nome').value  = data.e1.nome  || '';
-      document.getElementById('e1-area').value  = data.e1.area  || '';
-      document.getElementById('e1-cargo').value = data.e1.cargo || '';
-      (data.e1.respostas || []).forEach((v, i) => {
-        const el = document.getElementById('e1-q' + (i+1));
-        if (el) el.value = v || '';
-      });
-    }
 
     if (data.pessoas && data.pessoas.length > 0) {
       pessoas = data.pessoas;
